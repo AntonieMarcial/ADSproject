@@ -9,88 +9,93 @@ import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.sql.Statement;
 
 public class Editar extends HttpServlet {
 
     private PrintWriter out;
 
     @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     out = response.getWriter();
-    response.setContentType("application/json");
-    response.addHeader("Access-Control-Allow-Origin", "*");
-
-    // Leer el cuerpo de la solicitud
-    StringBuilder sb = new StringBuilder();
+    
+    // Leer datos JSON enviados en el cuerpo de la solicitud
+    StringBuilder jsonBody = new StringBuilder();
     String line;
     while ((line = request.getReader().readLine()) != null) {
-        sb.append(line);
+        jsonBody.append(line);
     }
 
-    // Convertir el cuerpo a un objeto JSON
-    JSONObject jsonRequest = new JSONObject(sb.toString());
-
-    // Obtener los parámetros del cuerpo de la solicitud
-    String idEjercicio = jsonRequest.getString("idEjercicio");
-    String pregunta = jsonRequest.getString("pregunta");
-    String respuesta = jsonRequest.getString("respuesta");
-    String drags = jsonRequest.getString("drags");  // Se espera un JSON string
-    String targets = jsonRequest.getString("targets");  // Se espera un JSON string
-
-    // Crear un objeto JSON con los nuevos valores
-    JSONObject json = new JSONObject();
-    json.put("id", idEjercicio);
-    json.put("pregunta", pregunta);
-    json.put("respuesta", respuesta);
-
-    // Verificar que los parámetros drags y targets no sean null o vacíos
-    if (drags != null && !drags.isEmpty()) {
-        json.put("drags", new JSONArray(drags));  // Si drags no es null ni vacío, agregarlo como JSON array
-    } else {
-        json.put("drags", new JSONArray());  // Si es vacío o null, asignar un arreglo vacío
-    }
-
-    if (targets != null && !targets.isEmpty()) {
-        json.put("targets", new JSONArray(targets));  // Si targets no es null ni vacío, agregarlo como JSON array
-    } else {
-        json.put("targets", new JSONArray());  // Si es vacío o null, asignar un arreglo vacío
-    }
-
-    String columnajson = json.toString();  // Convertir el objeto JSON a String para almacenarlo en la columna
-
-    // Respuesta JSON para la salida
-    StringBuilder responseJson = new StringBuilder();
-    responseJson.append("{");
-
+    System.out.println("Datos recibidos para editar: " + jsonBody.toString());
+    
+    // Extraer el contenido JSON de la solicitud
     try {
-        // Establecer conexión a la base de datos
+        // Convertir el JSON recibido a un objeto de tipo JSONObject
+        org.json.JSONObject jsonObject = new org.json.JSONObject(jsonBody.toString());
+        
+        // Extraer los datos del JSON
+        String idEjercicio = jsonObject.getString("idEjercicio");
+        String pregunta = jsonObject.getString("pregunta");
+        String respuesta = jsonObject.getString("respuesta");
+        org.json.JSONArray drags = jsonObject.getJSONArray("drags");  // Asegúrate de que drags sea un JSONArray
+        org.json.JSONArray targets = jsonObject.getJSONArray("targets");  // Asegúrate de que targets sea un JSONArray
+        
+        // Actualizar los datos en la base de datos
+        updatePreguntaInDB(idEjercicio, pregunta, respuesta, drags, targets);
+        
+        // Enviar respuesta de éxito
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        out.write("{\"message\": \"Pregunta actualizada exitosamente.\"}");
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        out.write("{\"error\": \"Hubo un error al procesar la solicitud.\"}");
+    }
+}
+
+
+    private void updatePreguntaInDB(String idEjercicio, String pregunta, String respuesta, org.json.JSONArray drags, org.json.JSONArray targets) {
+    try {
+        // Conectar a la base de datos
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection db = DriverManager.getConnection("jdbc:mysql://localhost/crudjson", "root", "1234");
-
-        // Preparar la consulta para actualizar la columna `columnajson`
-        String query = "UPDATE tablajson SET columnajson=? WHERE idEjercicio=?";
-        PreparedStatement ps = db.prepareStatement(query);
-        ps.setString(1, columnajson);  // Establecer el nuevo JSON como valor
-        ps.setInt(2, Integer.parseInt(idEjercicio));  // Establecer el idEjercicio como criterio de búsqueda
-
-        int rowsUpdated = ps.executeUpdate();
-        if (rowsUpdated > 0) {
-            responseJson.append("\"success\": true}");
-        } else {
-            responseJson.append("\"success\": false, \"message\": \"No se encontró el ejercicio con el idEjercicio proporcionado\"}");
-        }
-
+        
+        // Usamos PreparedStatement para evitar problemas con caracteres especiales
+        String updateQuery = "UPDATE tablajson SET "
+                + "columnajson = JSON_SET(columnajson, "
+                + "'$.pregunta', ?, "
+                + "'$.respuesta', ?, "
+                + "'$.drags', ?, "
+                + "'$.targets', ? "
+                + ") WHERE idEjercicio = ?";
+        
+        PreparedStatement stmt = db.prepareStatement(updateQuery);
+        
+        // Establecer los valores en el PreparedStatement
+        stmt.setString(1, pregunta);
+        stmt.setString(2, respuesta);
+        
+        // Convertir drags y targets en formato JSON directamente
+        stmt.setString(3, drags.toString());  // Convertimos el JSONArray a una cadena JSON
+        stmt.setString(4, targets.toString()); // Convertimos el JSONArray a una cadena JSON
+        
+        // Establecemos el idEjercicio como un parámetro
+        stmt.setString(5, idEjercicio);
+        
+        // Ejecutar la actualización
+        stmt.executeUpdate();
         db.close();
     } catch (Exception e) {
         e.printStackTrace();
-        responseJson.append("\"success\": false, \"message\": \"Error en la base de datos\"}");
     }
-
-    responseJson.append("}");
-    out.write(responseJson.toString());
 }
 
+
+
+
+  
 
 }

@@ -10,9 +10,9 @@ class Nueva extends React.Component {
             id: "",
             pregunta: "",
             respuesta: "",
-            drags: [{ imagen: "", valor: "" }],
-            targets: [{ imagen: "", valor: "" }]
-        };
+            drags: [],
+            targets: []
+        }
     }
 
     handleChange = (event) => {

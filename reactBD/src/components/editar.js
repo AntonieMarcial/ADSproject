@@ -10,9 +10,9 @@ class Editar extends React.Component {
             id: "",
             pregunta: "",
             respuesta: "",
-            drags: [{ imagen: "", valor: "" }],
-            targets: [{ imagen: "", valor: "" }]
-        };
+            drags: [],
+            targets: []
+        }
     }
 
     // Obtener los datos de la pregunta al montar el componente
@@ -58,18 +58,17 @@ class Editar extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault();
         
-        // Crear un objeto con solo los datos necesarios para la actualización
-        const { id, pregunta, respuesta, drags, targets } = this.state;
-        const data = {
-            idEjercicio: id, // idEjercicio en lugar de 'id' en el estado
-            pregunta,
-            respuesta,
-            drags: JSON.stringify(drags),  // Convertir a JSON string
-            targets: JSON.stringify(targets)  // Convertir a JSON string
+        // Preparar los datos que vas a enviar
+        const dataToSend = {
+            idEjercicio: this.state.id,  // Asegúrate de enviar el idEjercicio
+            pregunta: this.state.pregunta,
+            respuesta: this.state.respuesta,
+            drags: this.state.drags,
+            targets: this.state.targets
         };
     
-        // Enviar los datos al endpoint Editar para actualizar la pregunta
-        axios.put("Editar", data)  // Aquí ahora estamos enviando los datos correctamente
+        // Enviar los datos como JSON en el cuerpo del request
+        axios.put("Editar", dataToSend)  // Asegúrate de que el cuerpo se envíe correctamente
             .then(response => {
                 console.log("Pregunta actualizada exitosamente", response.data);
                 alert("Pregunta actualizada exitosamente");
@@ -79,6 +78,7 @@ class Editar extends React.Component {
                 alert("Ha ocurrido un error al actualizar la pregunta");
             });
     };
+    
     
 
     render() {
