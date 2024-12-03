@@ -1,0 +1,25 @@
+DROP DATABASE IF EXISTS usuarios;
+CREATE DATABASE usuarios;
+use usuarios;
+CREATE TABLE login (
+ idLOGIN INT NOT NULL AUTO_INCREMENT,
+ USERNAME VARCHAR(45) NULL ,
+ PASSWORD VARCHAR(45) NULL ,
+ PRIMARY KEY (idLOGIN) );
+INSERT INTO login (USERNAME, PASSWORD) VALUES ('admin', '1234');
+
+DROP DATABASE IF EXISTS crudjson;
+CREATE DATABASE crudjson;
+use crudjson;
+
+CREATE TABLE tablajson(
+idEjercicio INT NOT NULL AUTO_INCREMENT,
+columnajson JSON,
+PRIMARY KEY (idEjercicio));
+
+insert into tablajson(columnajson) values('{"id" : "1","pregunta" : "Una simple pregunta de prueba","respuesta" : "OP1-3;OP2-4;OP3-1;OP4-2","drags" : [{"imagen" : "https://via.placeholder.com/150","valor" : "Fidel Castro"},{"imagen" : "https://via.placeholder.com/150","valor" : "George W. Bush"},{"imagen" : "https://via.placeholder.com/150","valor" : "Vidente Fox"},{"imagen" : "https://via.placeholder.com/150","valor" : "Ricardo Lagos"}],"targets" : [{"imagen" : "https://via.placeholder.com/150","valor" : "Mexico"},{"imagen" : "https://via.placeholder.com/150","valor" : "Chile"},{"imagen" : "https://via.placeholder.com/150","valor" : "Cuba"},{"imagen" : "https://via.placeholder.com/150","valor" : "Estados Unidos"}]}');
+insert into tablajson(columnajson) values('{"id" : "2","pregunta" : "Una simple pregunta de prueba","respuesta" : "OP1-3;OP2-4;OP3-1;OP4-2","drags" : [{"imagen" : "https://via.placeholder.com/150","valor" : "Fidel Castro"},{"imagen" : "https://via.placeholder.com/150","valor" : "George W. Bush"},{"imagen" : "https://via.placeholder.com/150","valor" : "Vidente Fox"},{"imagen" : "https://via.placeholder.com/150","valor" : "Ricardo Lagos"}],"targets" : [{"imagen" : "https://via.placeholder.com/150","valor" : "Mexico"},{"imagen" : "https://via.placeholder.com/150","valor" : "Chile"},{"imagen" : "https://via.placeholder.com/150","valor" : "Cuba"},{"imagen" : "https://via.placeholder.com/150","valor" : "Estados Unidos"}]}');
+insert into tablajson(columnajson) values('{"id" : "3","pregunta" : "Una simple pregunta de prueba","respuesta" : "OP1-3;OP2-4;OP3-1;OP4-2","drags" : [{"imagen" : "https://via.placeholder.com/150","valor" : "Fidel Castro"},{"imagen" : "https://via.placeholder.com/150","valor" : "George W. Bush"},{"imagen" : "https://via.placeholder.com/150","valor" : "Vidente Fox"},{"imagen" : "https://via.placeholder.com/150","valor" : "Ricardo Lagos"}],"targets" : [{"imagen" : "https://via.placeholder.com/150","valor" : "Mexico"},{"imagen" : "https://via.placeholder.com/150","valor" : "Chile"},{"imagen" : "https://via.placeholder.com/150","valor" : "Cuba"},{"imagen" : "https://via.placeholder.com/150","valor" : "Estados Unidos"}]}');
+
+
+
