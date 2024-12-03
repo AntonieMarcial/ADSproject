@@ -36,7 +36,7 @@ class Home extends React.Component
                         : null
                 }                
                 <Button variant="info" style={{ margin: "12px" }}>
-                    <Link to="/Proyecto/formulario" className="CustomLink">NUEVA PREGUNTA</Link>
+                    <Link to="/Proyecto/nueva" className="CustomLink">NUEVA PREGUNTA</Link>
                 </Button>
                 <Table striped bordered >
                     <thead>

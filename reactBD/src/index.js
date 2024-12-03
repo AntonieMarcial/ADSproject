@@ -9,6 +9,8 @@ import "./styles/styles.css"
 import Login from "./components/login"
 import Info from "./components/info"
 import Editar from "./components/editar";
+import Nueva from "./components/nueva";
+import Eliminar from "./components/eliminar";
 
 const App = () => {
     return (
@@ -20,12 +22,20 @@ const App = () => {
                 <Route exact path="/Proyecto/home">
                     <Home />
                 </Route>
-                <Route exact path="/Proyecto/info">
+
+                <Route exact path="/Proyecto/info"> 
                     <Info />
                 </Route>
                 <Route exact path="/Proyecto/editar">
                     <Editar />
-                </Route>                  
+                </Route>
+                <Route exact path="/Proyecto/nueva">
+                    <Nueva />
+                </Route>
+                <Route exact path="/Proyecto/eliminar">
+                    <Eliminar />
+                </Route>
+      
                 <Route path="*" render={() => <h1>RECURSO NO ENCONTRADO</h1>} />
             </Switch>
         </div>
