@@ -1,0 +1,23 @@
+DROP DATABASE IF EXISTS geomultimedia;
+CREATE DATABASE geomultimedia;
+use geomultimedia;
+CREATE TABLE login (
+ idLOGIN INT NOT NULL AUTO_INCREMENT,
+ USERNAME VARCHAR(45) NULL ,
+ PASSWORD VARCHAR(45) NULL ,
+ PRIMARY KEY (idLOGIN) );
+INSERT INTO login (USERNAME, PASSWORD) VALUES ('admin', '1234');
+
+CREATE TABLE media_files (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    category VARCHAR(100) NOT NULL,
+    file_name VARCHAR(255) NOT NULL,
+    file_type VARCHAR(100) NOT NULL,
+    file_path VARCHAR(500) NOT NULL,
+    latitude DECIMAL(10,2) NOT NULL,
+    longitude DECIMAL(10,2) NOT NULL,
+    upload_date DATETIME NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
