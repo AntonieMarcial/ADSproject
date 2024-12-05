@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .MarginContainer {
     margin-top: 24px;
 }
@@ -27,4 +31,72 @@
     width: 140px;
     height: 140px;
     object-fit: contain;
+}
+
+/* Agregar al archivo styles.css */
+
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('../assets/images/imgProyecto.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.login-content {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.team-members {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+}
+
+.team-members h4 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.team-members ul {
+    list-style: none;
+    padding: 0;
+}
+
+.team-members li {
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.app-container {
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.debug-info {
+    background-color: #f8f9fa;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+.upload-container {
+    padding: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background-color: white;
+}
+
+.error-container {
+    text-align: center;
+    padding: 40px;
+    color: #dc3545;
 }
