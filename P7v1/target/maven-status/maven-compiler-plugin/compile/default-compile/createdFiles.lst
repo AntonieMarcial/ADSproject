@@ -1,0 +1,9 @@
+DB\DB.class
+servlets\FileListServlet.class
+servlets\updateFile.class
+servlets\FileUploadServlet.class
+servlets\UpdateFileServlet.class
+servlets\DeleteFileServlet.class
+servlets\NUser.class
+servlets\Login.class
+DB\DatabaseConnection.class
