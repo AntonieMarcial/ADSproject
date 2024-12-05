@@ -16,6 +16,9 @@ const App = () => {
     return (
         <div>
             <Switch>
+                <Route exact path="">
+                    <Login />
+                </Route>
                 <Route exact path="/Proyecto">
                     <Login />
                 </Route>
