@@ -2,8 +2,10 @@ import React from 'react';
 import { useGeolocated } from "react-geolocated";
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "./../styles/styles.css";
 
 const FileUpload = () => {
+  
   const [state, setState] = React.useState({
     selectedFile: null,
     preview: null,
@@ -90,6 +92,9 @@ const FileUpload = () => {
         latitude: null,
         longitude: null,
       });
+      setTimeout(() => {
+        navigate('/P7v1/home');
+      }, 2000);
     })
     .catch(error => {
       setState(prevState => ({ ...prevState, uploadStatus: 'Error: ' + error.message }));
@@ -99,42 +104,45 @@ const FileUpload = () => {
   const { preview, uploadStatus, selectedFile, title, description, category } = state;
 
   return (
-    
-    <div className="p-4">
-      <h2 className="text-2xl mb-4">Subir Nuevo Archivo</h2>
-      <Link to="/P7v1/home" className="text-blue-500">Volver al Inicio</Link>
-      
-      <div className="space-y-4">
-        <div>
-          <label className="block mb-2">Título*:</label>
+    <div className="form-container">
+    <div className="form-header">
+      <h2 className="form-title">Crear nuevo reporte</h2>
+      <Link to="/P7v1/home" className="back-link"><button className="form-button" >Volver al Inicio</button></Link>
+    </div>
+  
+      <div className="form-content">
+        <div className="form-group">
+          <label className="form-label">Título <span className="required">*</span>:</label>
           <input
             type="text"
             name="title"
             value={title}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded"
+            className="form-input"
+            placeholder="Ingrese el título"
             required
           />
         </div>
-
-        <div>
-          <label className="block mb-2">Descripción:</label>
+  
+        <div className="form-group">
+          <label className="form-label">Descripción:</label>
           <textarea
             name="description"
             value={description}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded"
+            className="form-textarea"
             rows="3"
+            placeholder="Ingrese una descripción (opcional)"
           />
         </div>
-
-        <div>
-          <label className="block mb-2">Categoría*:</label>
+  
+        <div className="form-group">
+          <label className="form-label">Categoría <span className="required">*</span>:</label>
           <select
             name="category"
             value={category}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded"
+            className="form-select"
             required
           >
             <option value="">Seleccione una categoría</option>
@@ -145,62 +153,65 @@ const FileUpload = () => {
             <option value="otros">Otros</option>
           </select>
         </div>
-
-        <div>
-          <label className="block mb-2">Archivo*:</label>
+  
+        <div className="form-group">
+          <label className="form-label">Archivo <span className="required">*</span>:</label>
           <input
             type="file"
             onChange={handleFileSelect}
             accept="image/*,video/*,audio/*"
-            className="mb-2"
+            className="form-file"
+            required
           />
         </div>
-
+  
         {preview && (
-          <div className="mb-4">
-            {selectedFile?.type.startsWith('image/') ? (
-              <img src={preview} alt="Preview" className="max-w-xs" />
-            ) : selectedFile?.type.startsWith('video/') ? (
-              <video src={preview} controls className="max-w-xs" />
+          <div className="form-preview">
+            {selectedFile?.type.startsWith("image/") ? (
+              <img src={preview} alt="Preview" className="preview-image" />
+            ) : selectedFile?.type.startsWith("video/") ? (
+              <video src={preview} controls className="preview-video" />
             ) : null}
           </div>
         )}
-
-        <div>
-          <label className="block mb-2">Localización:</label>
+  
+        <div className="form-group">
+          <label className="form-label">Localización:</label>
           {isGeolocationAvailable ? (
             isGeolocationEnabled ? (
               coords ? (
-                <p>
+                <p className="form-location">
                   Latitud: {coords.latitude}, Longitud: {coords.longitude}
                 </p>
               ) : (
-                <p>Obteniendo localización...</p>
+                <p className="form-location">Obteniendo localización...</p>
               )
             ) : (
-              <p>La geolocalización está desactivada.</p>
+              <p className="form-location">La geolocalización está desactivada.</p>
             )
           ) : (
-            <p>Su navegador no soporta geolocalización.</p>
+            <p className="form-location">Su navegador no soporta geolocalización.</p>
           )}
         </div>
-
+  
         <button
           onClick={handleUpload}
-          className="px-4 py-2 bg-blue-500 text-white rounded"
+          className="form-button"
           disabled={!selectedFile || !title || !category}
         >
           Subir Archivo
         </button>
-
+  
         {uploadStatus && (
-          <div className="mt-4">
+          <div className="form-status">
             <p>{uploadStatus}</p>
           </div>
         )}
       </div>
     </div>
   );
+  
+  
 };
 
 export default FileUpload;

@@ -83,75 +83,87 @@ class FileList extends React.Component {
     if (!Array.isArray(files)) return <div>No hay archivos para mostrar</div>;
 
     return (
-      
-
-      <div className="p-4">
-        <h2 className="text-2xl font-bold mb-6">Archivos Multimedia</h2>
-        <Link to="/P7v1/UpReporte" className="CustomLink"> Crear Nuevo Reporte</Link>
-        {files.length === 0 ? (
-          
-          <div className="text-center text-gray-500">No hay archivos subidos
-          <Link to="/P7v1/UpReporte" className="CustomLink"> Crear Nuevo Reporte</Link>
+      <div>
+        {/* Navbar */}
+        <nav className="navbar">
+          <div className="navbar-container">
+            <h1 className="navbar-title">Reportes con geolocalización</h1>
           </div>
-
-        ) : (
-          <div className="grid gap-6">
-            {files.map(file => (
-              <div key={file.id} className="bg-white rounded-lg shadow-md p-6">
-                <div className="flex justify-between items-start">
-                  <div className="flex-grow">
-                    <h3 className="text-xl font-semibold mb-2">{file.title}</h3>
-                    <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${this.getCategoryColor(file.category)} mb-3`}>
-                      {file.category}
-                    </span>
-                    {file.description && (
-                      <p className="text-gray-600 mb-3">{file.description}</p>
-                    )}
-                    <div className="text-sm text-gray-500">
-                      <p>Archivo: {file.fileName}</p>
-                      <p>Tipo: {file.fileType}</p>
-                      <p>Subido: {new Date(file.uploadDate).toLocaleString()}</p>
-                      <p>Ubicación: Latitud:{file.latitude}, Longitud:{file.longitude}</p>
+        </nav>
+    
+        {/* Contenido principal */}
+        <div className="container">
+          {files.length === 0 ? (
+            <div className="no-files">
+              <p>No hay reportes registrados</p>
+            </div>
+          ) : (
+            <div className="file-grid">
+              {files.map(file => (
+                <div key={file.id} className="file-card">
+                  <div className="file-header">
+                    <div className="file-info">
+                      <h3 className="file-title">{file.title}</h3>
+                      <span className={`file-category ${this.getCategoryColor(file.category)}`}>
+                        {file.category}
+                      </span>
+                      {file.description && (
+                        <p className="file-description">{file.description}</p>
+                      )}
+                      <div className="file-details">
+                        <p>Archivo: {file.fileName}</p>
+                        <p>Tipo: {file.fileType}</p>
+                        <p>Subido: {new Date(file.uploadDate).toLocaleString()}</p>
+                        <p>Ubicación: Latitud: {file.latitude.toString()}, Longitud: {file.longitude.toString()}</p>
+                      </div>
+                    </div>
+                    <div className="file-actions">
+                      <button
+                        onClick={() => this.handleView(file.id)}
+                        className="btn-view"
+                      >
+                        Ver Archivo Multimedia
+                      </button>
+                      <button
+                        onClick={() => this.handleEdit(file)}
+                        className="btn-edit"
+                      >
+                        Editar
+                      </button>
+                      <button
+                        onClick={() => this.handleDelete(file.id)}
+                        className="btn-delete"
+                      >
+                        Eliminar
+                      </button>
                     </div>
                   </div>
-                  <div className="flex space-x-2 ml-4">
-                    <button
-                      onClick={() => this.handleView(file.id)}
-                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    >
-                      Ver Archivo Multimedia
-                    </button>
-                    <button
-                      onClick={() => this.handleEdit(file)}
-                      className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                    >
-                      Editar
-                    </button>
-                    <button
-                      onClick={() => this.handleDelete(file.id)}
-                      className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                    >
-                      Eliminar
-                    </button>
-                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          )}
+    
+          {editingFile && (
+            <EditFileModal
+              file={editingFile}
+              onClose={() => this.setState({ editingFile: null })}
+              onUpdate={() => {
+                this.loadFiles();
+                this.setState({ editingFile: null });
+              }}
+            />
+          )}
+    
+          {/* Mover el botón de creación de nuevo reporte al final */}
+          <div className="no-files">
+            <Link to="/P7v1/UpReporte" class="floating-button">Crear Nuevo Reporte</Link>
           </div>
-        )}
-
-        {editingFile && (
-          <EditFileModal
-            file={editingFile}
-            onClose={() => this.setState({ editingFile: null })}
-            onUpdate={() => {
-              this.loadFiles();
-              this.setState({ editingFile: null });
-            }}
-          />
-        )}
+        </div>
       </div>
     );
+    
+    
+    
   }
 }
 
