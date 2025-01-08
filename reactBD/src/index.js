@@ -9,6 +9,7 @@ import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import FileUpload from "./components/fileUpload";
 import ListReporte from "./components/fileList";
 import EditFileModal from "./components/EditFileModal";
+import MapVisualization from './components/map-visualization';
 
 const App = () => {
     return ( 
@@ -37,6 +38,7 @@ const App = () => {
                         <EditFileModal />
                     </div>
                 </Route>
+                <Route path="/P7v1/map" component={MapVisualization} />
                 <Route path="*">
                     <div className="error-container">
                         <h1>RECURSO NO ENCONTRADO</h1>
