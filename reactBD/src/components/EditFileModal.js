@@ -55,7 +55,7 @@ class EditFileModal extends React.Component {
 
     console.log('Enviando datos:', formData);
 
-    fetch('http://localhost:8080/P7v1/update', {
+    fetch('http://localhost:8080/P7v1/update', { // Se hace una petición al servidor para actualizar el reporte
       method: 'POST',
       body: formData,
     })
@@ -72,11 +72,11 @@ class EditFileModal extends React.Component {
     });
   };
 
-  render() {
+  render() { // Método para renderizar el componente 
     const { title, description, category, preview,latitude,longitude ,error } = this.state;
     const { file, onClose } = this.props;
 
-    return (
+    return (  // Se retorna el contenido del componente
       <div className="modal-overlay">
         <div className="modal-container">
           <h2 className="modal-title">Editar Archivo</h2>

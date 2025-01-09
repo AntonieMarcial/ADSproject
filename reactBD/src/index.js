@@ -11,7 +11,7 @@ import ListReporte from "./components/fileList";
 import EditFileModal from "./components/EditFileModal";
 import MapVisualization from './components/map-visualization';
 
-const App = () => {
+const App = () => { // Función principal de la aplicación que renderiza los componentes de la aplicación 
     return ( 
         <div className="app-container"> 
 

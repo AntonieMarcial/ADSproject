@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api'; // Se importan los componentes de Google Maps
 import { Link } from 'react-router-dom';
 import '../styles/map-styles.css';
 import '../styles/styles.css';
 
-const MapVisualization = () => {
-  const [reports, setReports] = useState([]);
+const MapVisualization = () => { // Función para visualizar los reportes en un mapa
+  const [reports, setReports] = useState([]); // Se inicializan los estados de la función
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedReport, setSelectedReport] = useState(null);
@@ -20,18 +20,18 @@ const MapVisualization = () => {
     fetchReports();
   }, []);
 
-  const fetchReports = async () => {
+  const fetchReports = async () => { // Función para cargar los reportes desde el servidor
     try {
       const response = await fetch('http://localhost:8080/P7v1/files');
       if (!response.ok) {
         throw new Error('Error al cargar los reportes');
       }
-      const data = await response.json();
-      setReports(data);
+      const data = await response.json(); // Se obtienen los datos de la respuesta
+      setReports(data); // Se almacenan los datos en el estado de la función
       
-      // Calculate center based on first report or default to a specific location
-      if (data && data.length > 0) {
-        setCenter({
+      // Se establece el centro del mapa en la ubicación del primer reporte cargado
+      if (data && data.length > 0) {  
+        setCenter({ //
           lat: parseFloat(data[0].latitude),
           lng: parseFloat(data[0].longitude)
         });
@@ -58,13 +58,13 @@ const MapVisualization = () => {
           </div>
         </nav>
 
-      <LoadScript googleMapsApiKey="AIzaSyDcXAVEXfcw5Lkma8gimZzdIUyfYX0OyxQ">
-        <GoogleMap
+      <LoadScript googleMapsApiKey="AIzaSyDcXAVEXfcw5Lkma8gimZzdIUyfYX0OyxQ"> // Se carga el script de Google Maps con la API Key 
+        <GoogleMap // Se renderiza el mapa de Google Maps
           mapContainerStyle={mapStyles}
           zoom={13}
           center={center}
         >
-          {reports.map((report) => (
+          {reports.map((report) => ( // Se mapean los reportes para mostrarlos en el mapa
             <Marker
               key={report.id}
               position={{
@@ -76,7 +76,7 @@ const MapVisualization = () => {
           ))}
 
           {selectedReport && (
-            <InfoWindow
+            <InfoWindow // Se muestra una ventana con la información del reporte seleccionado
               position={{
                 lat: parseFloat(selectedReport.latitude),
                 lng: parseFloat(selectedReport.longitude)

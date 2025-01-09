@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./../styles/styles.css";
 
-const FileUpload = () => {
+const FileUpload = () => { // Función para subir un reporte 
   
-  const [state, setState] = React.useState({
+  const [state, setState] = React.useState({ // Estado inicial de la función
     selectedFile: null,
     preview: null,
     title: '',
@@ -17,13 +17,14 @@ const FileUpload = () => {
     longitude: null,
   });
 
+// Se obtiene la localización del usuario con la función useGeolocated de la librería react-geolocated 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
       positionOptions: {
         enableHighAccuracy: false,
       },
       userDecisionTimeout: 5000,
-    });
+    });  
 
   React.useEffect(() => {
     if (coords) {
@@ -35,7 +36,7 @@ const FileUpload = () => {
     }
   }, [coords]);
 
-  const handleFileSelect = (event) => {
+  const handleFileSelect = (event) => { // Función para seleccionar un archivo y mostrar una vista previa
     const file = event.target.files[0];
     setState(prevState => ({ ...prevState, selectedFile: file }));
     
@@ -48,12 +49,12 @@ const FileUpload = () => {
     }
   };
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event) => { // Función para manejar los cambios en los campos del formulario 
     const { name, value } = event.target;
     setState(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const handleUpload = () => {
+  const handleUpload = () => { // Función para subir un archivo al servidor
     const { selectedFile, title, description, category, latitude, longitude } = state;
     
     if (!selectedFile || !title || !category) {
@@ -61,7 +62,7 @@ const FileUpload = () => {
       return;
     }
 
-    const formData = new FormData();
+    const formData = new FormData(); // Se crea un objeto FormData para enviar los datos al servidor 
     formData.append('file', selectedFile);
     formData.append('title', title);
     formData.append('description', description);
@@ -71,17 +72,17 @@ const FileUpload = () => {
     formData.append('latitude', latitude);
     formData.append('longitude', longitude);
 
-    setState(prevState => ({ ...prevState, uploadStatus: 'Subiendo archivo...' }));
+    setState(prevState => ({ ...prevState, uploadStatus: 'Subiendo archivo...' })); // Se muestra un mensaje de carga mientras se sube el archivo
     
-    fetch('http://localhost:8080/P7v1/upload', {
+    fetch('http://localhost:8080/P7v1/upload', { // Se hace una petición al servidor para subir el archivo
       method: 'POST',
       body: formData,
     })
-    .then(response => {
-      if (response.ok) return response.json();
+    .then(response => { // Se obtiene la respuesta del servidor
+      if (response.ok) return response.json(); // Si la respuesta es correcta se retorna la respuesta en formato JSON
       throw new Error('Error en la respuesta del servidor');
     })
-    .then(result => {
+    .then(result => { // Se muestra un mensaje de éxito y se redirige al usuario al inicio
       setState({
         selectedFile: null,
         preview: null,
@@ -103,7 +104,7 @@ const FileUpload = () => {
 
   const { preview, uploadStatus, selectedFile, title, description, category } = state;
 
-  return (
+  return ( // Se retorna el formulario para subir un archivo al servidor 
     <div className="form-container">
     <div className="form-header">
       <h2 className="form-title">Crear nuevo reporte</h2>
@@ -177,11 +178,11 @@ const FileUpload = () => {
   
         <div className="form-group">
           <label className="form-label">Localización:</label>
-          {isGeolocationAvailable ? (
+          {isGeolocationAvailable ? ( // Se muestra la localización del usuario si está disponible obtenida con la librería react-geolocated
             isGeolocationEnabled ? (
               coords ? (
                 <p className="form-location">
-                  Latitud: {coords.latitude}, Longitud: {coords.longitude}
+                  Latitud: {coords.latitude}, Longitud: {coords.longitude}  
                 </p>
               ) : (
                 <p className="form-location">Obteniendo localización...</p>

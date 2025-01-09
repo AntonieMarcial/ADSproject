@@ -88,6 +88,9 @@ class FileList extends React.Component {
         <nav className="navbar">
           <div className="navbar-container">
             <h1 className="navbar-title">Reportes con geolocalización</h1>
+            <Link to="/P7v1/map" className="btn btn-primary">
+              Ver en Mapa
+            </Link>
           </div>
         </nav>
     
